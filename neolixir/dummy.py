@@ -1,3 +1,4 @@
+from builtins import object
 class DummyEntity(object):
 
     __slots__ = ['id', 'properties']

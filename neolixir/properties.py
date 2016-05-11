@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from builtins import str
+from past.builtins import basestring
 from types import FunctionType
 from inspect import getargspec
 from collections import Iterable
@@ -74,7 +76,7 @@ class Boolean(Property):
 
 class String(Property):
 
-    __value_type__ = unicode
+    __value_type__ = str
 
 class Enum(String):
 
@@ -113,7 +115,7 @@ class Numeric(Property):
     def normalize(self, value):
         if value is not None:
             try:
-                value = super(Numeric, self).normalize(unicode(value))
+                value = super(Numeric, self).normalize(str(value))
             except InvalidOperation:
                 raise ValueError(u"Invalid value for Numeric: {0}".format(value))
         if self.scale is not None and isinstance(value, Decimal):

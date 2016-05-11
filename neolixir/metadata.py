@@ -1,6 +1,7 @@
 from __future__ import absolute_import
+from builtins import object
 import threading
-from itertools import ifilter
+
 from .utils import classproperty
 from . import overrides
 from py2neo import neo4j

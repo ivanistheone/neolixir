@@ -97,7 +97,7 @@ class PropDict(dict):
 
     def sanitize(self):
         super(PropDict, self).__setitem__('__class__', self.owner.__class__.__name__)
-        for name, descriptor in self.owner.descriptors.iteritems():
+        for name, descriptor in self.owner.descriptors.items():
             if isinstance(descriptor, Property) and self.get(name) is None:
                 default = descriptor.get_default(self.owner)
                 if default is not None:
@@ -130,9 +130,9 @@ class PropDict(dict):
         if len(args) > 1:
             raise TypeError('update expected at most 1 arguments')
         elif len(args) == 1:
-            iterator = chain(args[0].iteritems() if isinstance(args[0], dict) else args[0],
-                             kwargs.iteritems())
+            iterator = chain(iter(args[0].items()) if isinstance(args[0], dict) else args[0],
+                             iter(kwargs.items()))
         else:
-            iterator = kwargs.iteritems()
+            iterator = iter(kwargs.items())
         for key, value in iterator:
             self[key] = value

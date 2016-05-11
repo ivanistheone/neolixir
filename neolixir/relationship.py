@@ -1,4 +1,7 @@
 from __future__ import absolute_import
+from past.builtins import cmp
+from builtins import str
+from past.builtins import basestring
 from . import overrides
 from py2neo import neo4j
 from .exc import *

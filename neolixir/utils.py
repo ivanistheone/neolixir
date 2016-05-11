@@ -1,4 +1,5 @@
 """Contains various general utilities."""
+from builtins import object
 
 IN = -1
 OUT = 1

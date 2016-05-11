@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from past.builtins import cmp
+from builtins import object
 from time import time
 from collections import Iterable
 from .metadata import metadata as m
@@ -35,7 +37,7 @@ class SessionEvents(dict):
         self[key] = Event(caller, event, target, *args)
 
     def fire_committed(self):
-        for event in sorted(self.itervalues()):
+        for event in sorted(self.values()):
             event.fire('committed')
         self.clear()
 
@@ -43,7 +45,7 @@ class ObserverDict(dict):
 
     def copy(self):
         copy = ObserverDict()
-        for key, value in self.iteritems():
+        for key, value in self.items():
             copy[key] = value.copy()
         return copy
 
@@ -63,7 +65,7 @@ class ObservableMeta(type):
         cls._observers = cls._observers.copy() if hasattr(cls, '_observers') else ObserverDict()
         for base in bases:
             if hasattr(base, '_observers'):
-                for event, observers in base._observers.iteritems():
+                for event, observers in base._observers.items():
                     for observer in observers:
                         cls._observers[event].add(observer)
 
@@ -75,7 +77,7 @@ class Observable(object):
         elif hasattr(self.__class__, '_observers'):
             if self._observers is self.__class__._observers:
                 self._observers = self._observers.copy()
-        for event, observers in observer_dict.iteritems():
+        for event, observers in observer_dict.items():
             if not isinstance(observers, Iterable):
                 observers = [observers]
             for observer in observers:
@@ -97,7 +99,7 @@ def observe(observer_dict):
     def decorate(obj):
         if not hasattr(obj, '_observers'):
             obj._observers = ObserverDict()
-        for event, observers in observer_dict.iteritems():
+        for event, observers in observer_dict.items():
             if not isinstance(observers, Iterable):
                 observers = [observers]
             for observer in observers:

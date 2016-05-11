@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import str
 from . import overrides
 import py2neo
 from py2neo import neo4j
@@ -8,6 +9,7 @@ from .metadata import metadata as m
 from .properties import Property, FieldDescriptor
 from .observable import Observable, ObservableMeta
 from .dummy import DummyEntity
+from future.utils import with_metaclass
 
 __all__ = ['Entity']
 
@@ -23,19 +25,19 @@ class EntityMeta(ObservableMeta):
         cls._descriptors = cls._descriptors.copy() if hasattr(cls, '_descriptors') else {}
         for base in bases:
             if hasattr(base, '_descriptors'):
-                for k, v in base._descriptors.iteritems():
+                for k, v in base._descriptors.items():
                     if k not in cls._descriptors:
                         cls._descriptors[k] = v
 
         # class-defined descriptors
-        for k, v in dict_.iteritems():
+        for k, v in dict_.items():
             if isinstance(v, FieldDescriptor):
                 cls._descriptors[k] = v
                 v.name = k
         
         m.add(cls)
 
-class Entity(Observable):
+class Entity(with_metaclass(EntityMeta, Observable)):
 
     """Base class for all Neolixir entities (Nodes and Relationships).
     
@@ -50,8 +52,6 @@ class Entity(Observable):
     :returns: An :class:`Entity` or a subclass thereof.
     
     """
-    
-    __metaclass__ = EntityMeta
 
     _initialized = False
     _deleted = False
@@ -85,7 +85,7 @@ class Entity(Observable):
     def __init__(self, value=None, **properties):
         if not self._initialized:
             self._initialized = True
-            for k, v in properties.iteritems():
+            for k, v in properties.items():
                 if k in self._descriptors:
                     setattr(self, k, v)
                 else:
@@ -144,15 +144,15 @@ class Entity(Observable):
 
     def get_properties(self):
         data = {}
-        for k, v in self._descriptors.iteritems():
+        for k, v in self._descriptors.items():
             if isinstance(v, Property):
                 data[k] = getattr(self, k)
-        for k, v in self.properties.iteritems():
+        for k, v in self.properties.items():
             data.setdefault(k, v)
         return data
 
     def set_properties(self, data):
-        for k, v in data.iteritems():
+        for k, v in data.items():
             if k in self._descriptors:
                 setattr(self, k, v)
             else:
@@ -161,7 +161,7 @@ class Entity(Observable):
     def get_abstract(self, exclude_null=False):
         self.properties.sanitize()
         if exclude_null:
-            return {k: v for k, v in self.properties.iteritems() if v is not None}
+            return {k: v for k, v in self.properties.items() if v is not None}
         else:
             return self.properties
 

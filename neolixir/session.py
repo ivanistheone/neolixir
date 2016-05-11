@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+from builtins import str
+from builtins import object
 import re
 import sys
 import threading
@@ -95,12 +97,12 @@ class Session(object):
             if item.is_phantom():
                 return item in self.phantomnodes
             else:
-                return item in self.nodes.itervalues()
+                return item in iter(self.nodes.values())
         else:
             return item in self.relmap
 
     def __iter__(self):
-        return chain(self.nodes.itervalues(), self.phantomnodes, self.relmap)
+        return chain(iter(self.nodes.values()), self.phantomnodes, self.relmap)
 
     def __len__(self):
         return len(self.nodes) + len(self.phantomnodes) + len(self.relmap)
@@ -115,7 +117,7 @@ class Session(object):
 
     @property
     def dirty(self):
-        return sum((1 for x in chain(self.nodes.itervalues(), self.relmap.iterpersisted()) if x.is_dirty()))
+        return sum((1 for x in chain(iter(self.nodes.values()), self.relmap.iterpersisted()) if x.is_dirty()))
 
     def is_dirty(self):
         return self.new + self.dirty > 0
@@ -163,7 +165,7 @@ class Session(object):
         self.propmap.clear()
         self.relmap.rollback()
         self.phantomnodes.clear()
-        for node in self.nodes.itervalues():
+        for node in self.nodes.values():
             node.rollback()
 
     def commit(self, batched=True, batch_size=100):
@@ -228,7 +230,7 @@ class Session(object):
                     continue
 
                 elif isinstance(exc, EntityNotFoundException):
-                    error = unicode(exc)
+                    error = str(exc)
                     if re.search(r'Node \d+ not found', error):
                         id = re.sub(r'^.*Node (\d+) not found.*$', r'\1', error)
                         if id.isdigit():
@@ -257,7 +259,7 @@ class Session(object):
             self.batch.clear()
 
             # get data to be saved
-            nodes = list(chain(self.phantomnodes, self.nodes.itervalues()))
+            nodes = list(chain(self.phantomnodes, iter(self.nodes.values())))
             rels = list(self.relmap)
 
             saved = []
@@ -310,5 +312,5 @@ class Session(object):
         else:
             while len(self.phantomnodes) > 0:
                 self.phantomnodes.pop().save()
-            for entity in list(chain(self.nodes.itervalues(), self.relmap)):
+            for entity in list(chain(iter(self.nodes.values()), self.relmap)):
                 entity.save()

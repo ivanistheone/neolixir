@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import str
 from . import overrides
 from py2neo import neo4j
 from .utils import classproperty
@@ -87,5 +88,5 @@ class Node(Entity):
             except EntityNotFoundException:
                 return None
         else:
-            clauses = [u"instance.{0} = {1}".format(k, repr(v)) for k, v in kwargs.iteritems()]
+            clauses = [u"instance.{0} = {1}".format(k, repr(v)) for k, v in kwargs.items()]
             return cls.query.append('where {0}'.format(' and '.join(clauses))).first()

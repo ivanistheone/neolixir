@@ -1,7 +1,9 @@
 from __future__ import absolute_import
+from builtins import map
+from builtins import object
 from types import FunctionType
 from inspect import getargspec
-from itertools import chain, ifilter, imap
+from itertools import chain
 from . import overrides
 from py2neo import neo4j
 from .metadata import metadata as m
@@ -131,12 +133,12 @@ class RelMap(object):
             if item.is_phantom():
                 return item in self._phantoms
             else:
-                return item in self._ids.itervalues()
+                return item in iter(self._ids.values())
         else:
             return False
 
     def __iter__(self):
-        return chain(self._ids.itervalues(), iter(self._phantoms))
+        return chain(iter(self._ids.values()), iter(self._phantoms))
 
     def __len__(self):
         return len(self._ids) + len(self._phantoms)
@@ -145,7 +147,7 @@ class RelMap(object):
         return iter(self._phantoms)
 
     def iterpersisted(self):
-        return self._ids.itervalues()
+        return iter(self._ids.values())
 
     def rollback(self):
         try:
@@ -154,7 +156,7 @@ class RelMap(object):
                 self._unmap(rel)
         except KeyError:
             pass
-        for rel in self._ids.itervalues():
+        for rel in self._ids.values():
             rel.rollback()
 
 class RelView(object):
@@ -242,7 +244,7 @@ class RelView(object):
                 raise ValueError("could not find other Node")
 
     def __iter__(self):
-        return imap(self.nodefunc, self.data)
+        return map(self.nodefunc, self.data)
 
     def __contains__(self, item):
         if isinstance(item, Relationship):
@@ -254,16 +256,16 @@ class RelView(object):
         return len(self.data)
 
     def __repr__(self):
-        return "[{0}]".format(", ".join(imap(repr, iter(self))))
+        return "[{0}]".format(", ".join(map(repr, iter(self))))
 
     def __getitem__(self, key):
         return self.nodefunc(list(self.data)[key])
 
     def sorted(self, reverse=False):
-        return map(self.nodefunc, sorted(self.data,
+        return list(map(self.nodefunc, sorted(self.data,
                                          cmp=self.cls.__sort_cmp__,
                                          key=self.cls.__sort_key__,
-                                         reverse=reverse))
+                                         reverse=reverse)))
 
     def reversed(self):
         return self.sorted(reverse=True)

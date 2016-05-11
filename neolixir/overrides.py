@@ -1,3 +1,4 @@
+from builtins import str
 import py2neo
 
 if '2.0' <= py2neo.__version__ <= '2.0.8':

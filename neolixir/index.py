@@ -1,4 +1,7 @@
 from __future__ import absolute_import
+from builtins import str
+from builtins import map
+from builtins import object
 from . import overrides
 from py2neo import neo4j
 from .metadata import metadata as m
@@ -38,15 +41,15 @@ class Index(object):
         if isinstance(entity, Entity):
             entity = entity._entity
         func = self.index.add_if_none if if_none else self.index.add
-        return func(unicode(key), unicode(value), entity) is not None
+        return func(str(key), str(value), entity) is not None
 
     def get(self, key, value=None, abstract=None):
         if value is None:
             return self.index.query("{0}:*".format(key))
         elif abstract is None:
-            return self.index.get(unicode(key), unicode(value))
+            return self.index.get(str(key), str(value))
         else:
-            return self.index.get_or_create(unicode(key), unicode(value), abstract)
+            return self.index.get_or_create(str(key), str(value), abstract)
 
     def query(self, query):
         return self.index.query(query)
@@ -54,7 +57,7 @@ class Index(object):
     def remove(self, key=None, value=None, entity=None):
         if isinstance(entity, Entity):
             entity = entity._entity
-        self.index.remove(unicode(key), unicode(value), entity)
+        self.index.remove(str(key), str(value), entity)
 
 class NodeIndex(Index):
 
@@ -86,10 +89,10 @@ class NodeIndex(Index):
                 else:
                     return Node(super(NodeIndex, self).get(key, value)[0])
         else:
-            return map(Node, super(NodeIndex, self).get(key, value))
+            return list(map(Node, super(NodeIndex, self).get(key, value)))
 
     def query(self, query):
-        return map(Node, super(NodeIndex, self).query(query))
+        return list(map(Node, super(NodeIndex, self).query(query)))
 
 class RelationshipIndex(Index):
 
