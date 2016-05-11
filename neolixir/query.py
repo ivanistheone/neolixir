@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 import re
-from exc import *
-from metadata import metadata as m
-from utils import classproperty
+from .exc import *
+from .metadata import metadata as m
+from .utils import classproperty
 
 NEST_CHARS = {
     '\'': '\'',

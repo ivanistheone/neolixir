@@ -1,13 +1,14 @@
+from __future__ import absolute_import
 import threading
 from itertools import ifilter
-from utils import classproperty
-import overrides
+from .utils import classproperty
+from . import overrides
 from py2neo import neo4j
 from py2neo.core import Graph
 from py2neo.legacy.core import LegacyResource
-from session import Session
-from dummy import DummyNode, DummyRelationship
-from fast import fast_cypher
+from .session import Session
+from .dummy import DummyNode, DummyRelationship
+from .fast import fast_cypher
 
 __all__ = ['metadata']
 
@@ -90,13 +91,13 @@ class MetaData(object):
         return results
 
     def batch(self):
-        from batch import WriteBatch
+        from .batch import WriteBatch
         return WriteBatch(self.graph, self)
 
     @classmethod
     def automap(cls, data, mapRels=True):
-        from node import Node
-        from relationship import Relationship
+        from .node import Node
+        from .relationship import Relationship
 
         mapped = []
 
@@ -131,7 +132,7 @@ class MetaData(object):
         return mapped
 
     def init(self, reset=False):
-        from node import Node
+        from .node import Node
 
         #TODO: create label indexes as needed
 

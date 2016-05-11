@@ -1,12 +1,13 @@
-import overrides
+from __future__ import absolute_import
+from . import overrides
 import py2neo
 from py2neo import neo4j
-from exc import *
-from utils import classproperty
-from metadata import metadata as m
-from properties import Property, FieldDescriptor
-from observable import Observable, ObservableMeta
-from dummy import DummyEntity
+from .exc import *
+from .utils import classproperty
+from .metadata import metadata as m
+from .properties import Property, FieldDescriptor
+from .observable import Observable, ObservableMeta
+from .dummy import DummyEntity
 
 __all__ = ['Entity']
 

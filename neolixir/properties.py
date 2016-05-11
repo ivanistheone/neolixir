@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 from types import FunctionType
 from inspect import getargspec
 from collections import Iterable
 from decimal import Decimal, InvalidOperation
 from datetime import datetime
-from utils import IN, OUT, classproperty
-from observable import Observable
+from .utils import IN, OUT, classproperty
+from .observable import Observable
 
 __all__ = ['Boolean', 'String', 'Enum', 'Integer', 'Float', 'Numeric', 'DateTime',
            'Array', 'RelOut', 'RelIn', 'RelOutOne', 'RelInOne']
@@ -212,7 +213,7 @@ class RelDescriptor(FieldDescriptor):
 
     @classproperty
     def __relview_cls__(cls):
-        from relmap import RelView
+        from .relmap import RelView
         return RelView
 
     def get_relview(self, instance):

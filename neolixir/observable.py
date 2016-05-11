@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 from time import time
 from collections import Iterable
-from metadata import metadata as m
+from .metadata import metadata as m
 
 __all__ = ['observe']
 

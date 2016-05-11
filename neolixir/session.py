@@ -1,12 +1,13 @@
+from __future__ import absolute_import
 import re
 import sys
 import threading
 from copy import copy
 from itertools import chain
-import overrides
+from . import overrides
 from py2neo import neo4j
-from dummy import DummyEntity, DummyNode, DummyRelationship
-from exc import *
+from .dummy import DummyEntity, DummyNode, DummyRelationship
+from .exc import *
 
 class Session(object):
 
@@ -50,7 +51,7 @@ class Session(object):
         try:
             return self._threadlocal.events
         except AttributeError:
-            from observable import SessionEvents
+            from .observable import SessionEvents
             self._threadlocal.events = SessionEvents()
             return self._threadlocal.events
 
@@ -75,7 +76,7 @@ class Session(object):
         try:
             return self._threadlocal.relmap
         except AttributeError:
-            from relmap import RelMap
+            from .relmap import RelMap
             self._threadlocal.relmap = RelMap()
             return self._threadlocal.relmap
 
@@ -84,12 +85,12 @@ class Session(object):
         try:
             return self._threadlocal.propmap
         except AttributeError:
-            from propmap import PropMap
+            from .propmap import PropMap
             self._threadlocal.propmap = PropMap()
             return self._threadlocal.propmap
 
     def __contains__(self, item):
-        from node import Node
+        from .node import Node
         if isinstance(item, Node):
             if item.is_phantom():
                 return item in self.phantomnodes
@@ -120,7 +121,7 @@ class Session(object):
         return self.new + self.dirty > 0
 
     def add(self, entity):
-        from relationship import Relationship
+        from .relationship import Relationship
         if isinstance(entity, Relationship):
             self.relmap.add(entity)
         else:
@@ -140,7 +141,7 @@ class Session(object):
             return None
 
     def expunge(self, entity):
-        from relationship import Relationship
+        from .relationship import Relationship
         if isinstance(entity, Relationship):
             self.relmap.remove(entity)
             if entity._entity is not None and not isinstance(entity._entity, DummyEntity):
@@ -168,8 +169,8 @@ class Session(object):
     def commit(self, batched=True, batch_size=100):
         self.committing = True
 
-        from node import Node
-        from relationship import Relationship
+        from .node import Node
+        from .relationship import Relationship
 
         retry = True
         max_retry = 5

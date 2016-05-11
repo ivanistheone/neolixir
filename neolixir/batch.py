@@ -1,13 +1,14 @@
+from __future__ import absolute_import
 import functools
 from collections import Iterable
-from utils import classproperty
-import overrides
+from .utils import classproperty
+from . import overrides
 import py2neo
 from py2neo import neo4j
 from py2neo.batch import CypherJob
 from py2neo.legacy.batch import LegacyWriteBatch
-from node import Node
-from relationship import Relationship
+from .node import Node
+from .relationship import Relationship
 
 class WriteBatch(LegacyWriteBatch):
 

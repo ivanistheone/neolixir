@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 from itertools import chain
-import overrides
+from . import overrides
 from py2neo import neo4j
-from dummy import DummyEntity
-from metadata import metadata as m
-from properties import Property
+from .dummy import DummyEntity
+from .metadata import metadata as m
+from .properties import Property
 
 class PropMap(dict):
 
@@ -109,14 +110,14 @@ class PropDict(dict):
 
     def __setitem__(self, key, value):
         current = self.get(key)
-        if not self.has_key(key) or value != current:
+        if key not in self or value != current:
             super(PropDict, self).__setitem__(key, value)
             if not self.owner.is_phantom() and self.owner.has_observer('change', key):
                 self.owner.fire_event('change', key, current, self.get(key))
             self.set_dirty()
 
     def setdefault(self, key, default=None):
-        if self.has_key(key):
+        if key in self:
             return self[key]
         else:
             value = super(PropDict, self).setdefault(key, default)

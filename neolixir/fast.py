@@ -1,4 +1,5 @@
-from dummy import DummyNode, DummyRelationship
+from __future__ import absolute_import
+from .dummy import DummyNode, DummyRelationship
 
 def fast_cypher(metadata, query, params=None):
 
@@ -24,7 +25,7 @@ def hydrate(data, seen=None):
                 node = DummyNode(id, data.get('data'))
                 seen['nodes'][id] = node
             else:
-                if data.has_key('data'):
+                if 'data' in data:
                     node.properties.update(data['data'])
             return node
         elif data['self'].find('/db/data/relationship/') >= 0:
@@ -48,7 +49,7 @@ def hydrate(data, seen=None):
                 rel = DummyRelationship(id, start, type, end, data.get('data'))
                 seen['rels'][id] = rel
             else:
-                if data.has_key('data'):
+                if 'data' in data:
                     rel.properties.update(data['data'])
             return rel
         else:

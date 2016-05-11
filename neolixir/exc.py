@@ -1,7 +1,8 @@
 """Defines standard Neolixir exceptions and imports ``py2neo`` exceptions."""
+from __future__ import absolute_import
 
 import traceback
-import overrides
+from . import overrides
 
 from py2neo.error import GraphError
 from py2neo.cypher import CypherError

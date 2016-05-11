@@ -1,11 +1,12 @@
-import overrides
+from __future__ import absolute_import
+from . import overrides
 from py2neo import neo4j
-from utils import classproperty
-from exc import *
-from metadata import metadata as m
-from entity import Entity
-from query import Query
-from dummy import DummyNode
+from .utils import classproperty
+from .exc import *
+from .metadata import metadata as m
+from .entity import Entity
+from .query import Query
+from .dummy import DummyNode
 
 __all__ = ['Node']
 

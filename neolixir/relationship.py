@@ -1,10 +1,11 @@
-import overrides
+from __future__ import absolute_import
+from . import overrides
 from py2neo import neo4j
-from exc import *
-from metadata import metadata as m
-from entity import Entity
-from node import Node
-from dummy import DummyNode, DummyRelationship
+from .exc import *
+from .metadata import metadata as m
+from .entity import Entity
+from .node import Node
+from .dummy import DummyNode, DummyRelationship
 
 __all__ = ['Relationship']
 

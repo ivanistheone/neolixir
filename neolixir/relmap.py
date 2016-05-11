@@ -1,13 +1,14 @@
+from __future__ import absolute_import
 from types import FunctionType
 from inspect import getargspec
 from itertools import chain, ifilter, imap
-import overrides
+from . import overrides
 from py2neo import neo4j
-from metadata import metadata as m
-from relationship import Relationship
-from dummy import DummyRelationship
-from node import Node
-from utils import IN, OUT
+from .metadata import metadata as m
+from .relationship import Relationship
+from .dummy import DummyRelationship
+from .node import Node
+from .utils import IN, OUT
 
 class RelSet(set):
 
@@ -78,19 +79,19 @@ class RelMap(object):
         rel._relmap = None
 
     def _map(self, rel):
-        if not self.node.has_key(rel.start):
+        if rel.start not in self.node:
             self.node[rel.start] = set()
         self.node[rel.start].add(rel)
 
-        if not self.node.has_key(rel.end):
+        if rel.end not in self.node:
             self.node[rel.end] = set()
         self.node[rel.end].add(rel)
 
-        if not self.start.has_key((rel.start, rel.type)):
+        if (rel.start, rel.type) not in self.start:
             self.start[(rel.start, rel.type)] = RelSet(OUT)
         self.start[(rel.start, rel.type)].add(rel)
 
-        if not self.end.has_key((rel.end, rel.type)):
+        if (rel.end, rel.type) not in self.end:
             self.end[(rel.end, rel.type)] = RelSet(IN)
         self.end[(rel.end, rel.type)].add(rel)
 
@@ -195,11 +196,11 @@ class RelView(object):
             if not self.preloaded:
                 self.load()
             if self.direction == OUT:
-                if not self.relmap.start.has_key((self.owner, self.type)):
+                if (self.owner, self.type) not in self.relmap.start:
                     self.relmap.start[(self.owner, self.type)] = RelSet(OUT)
                 self._data = self.relmap.start[(self.owner, self.type)]
             else:
-                if not self.relmap.end.has_key((self.owner, self.type)):
+                if (self.owner, self.type) not in self.relmap.end:
                     self.relmap.end[(self.owner, self.type)] = RelSet(IN)
                 self._data = self.relmap.end[(self.owner, self.type)]
             return self._data
