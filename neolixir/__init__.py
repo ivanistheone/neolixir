@@ -20,6 +20,7 @@ from . import relationship as __m_relationship__
 
 __version__ = '2.1.0'
 
-__all__ = [n for m in dir() if re.match('^__m_.*', m) for n in eval(m).__all__]
+# __all__ = [n for m in dir() if re.match('^__m_.*', m) for n in eval(m).__all__]
 
-del re, n, m
+# del re, n, m
+
