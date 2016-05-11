@@ -1,6 +1,8 @@
+from future import standard_library
+standard_library.install_aliases()
 import sys
 import traceback
-from Queue import Queue
+from queue import Queue
 from threading import Thread
 
 def same_type_and_value(x, y):

@@ -1,4 +1,5 @@
-from common import *
+from __future__ import absolute_import
+from .common import *
 
 def test_password_change(m):
     assert m.version >= (2, 2), "Authentication not supported pre-2.2"

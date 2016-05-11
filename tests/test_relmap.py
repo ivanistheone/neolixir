@@ -1,4 +1,5 @@
-from common import *
+from __future__ import absolute_import
+from .common import *
 
 def test_contains_iter_len(m):
     n1 = TNode()

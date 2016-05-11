@@ -1,4 +1,6 @@
-from common import *
+from __future__ import absolute_import
+from builtins import range
+from .common import *
 from py2neo import neo4j
 
 def test_cypher(m):

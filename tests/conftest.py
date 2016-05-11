@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from builtins import str
 import os
 import pytest
 import warnings
@@ -27,7 +29,7 @@ def metadata():
             metadata.graph.delete_all()
         else:
             raise e
-    import models
+    from . import models
     metadata.init()
     return metadata
 

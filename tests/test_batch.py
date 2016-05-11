@@ -1,4 +1,6 @@
-from common import *
+from __future__ import absolute_import
+from builtins import range
+from .common import *
 from py2neo import neo4j
 
 def test_index(m):
@@ -31,7 +33,7 @@ def test_index(m):
     batch.index(index, 'node', '2', n1)
     batch.submit()
     assert len(batch.jobs) == 0
-    assert n1 in m.session.nodes.values()
+    assert n1 in list(m.session.nodes.values())
     assert len(index.get('node', '2')) == 1
     assert index.get('node', '2')[0] is n1
 
@@ -41,7 +43,7 @@ def test_index(m):
     assert len(batch.jobs) == 0
     assert len(m.session.phantomnodes) == 0
     assert len(m.session.nodes) == 1
-    assert n1 in m.session.nodes.values()
+    assert n1 in list(m.session.nodes.values())
     assert len(index.get('node', '2')) == 1
     assert index.get('node', '2')[0] is n1
 

@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+from past.builtins import basestring
 from neolixir.relmap import RelView
-from utils import *
+from .utils import *
 
 def create_out_of_session(m, entity):
 

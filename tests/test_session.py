@@ -1,6 +1,9 @@
-from Queue import Queue
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from queue import Queue
 from threading import Thread
-from common import *
+from .common import *
 from py2neo import neo4j
 
 def test_contains_iter_len(m):
@@ -372,10 +375,10 @@ def test_rollback(m):
     r3 = n1.trel_out.append(n3)
     m.session.rollback()
     assert not m.session.is_dirty()
-    assert n1 in m.session.nodes.values()
+    assert n1 in list(m.session.nodes.values())
     assert not n1.is_dirty()
     assert n1.string is None
-    assert n2 in m.session.nodes.values()
+    assert n2 in list(m.session.nodes.values())
     assert not n2.is_dirty()
     assert r1 in m.session.relmap
     assert not r1.is_dirty()

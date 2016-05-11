@@ -1,4 +1,5 @@
-from common import *
+from __future__ import absolute_import
+from .common import *
 from random import randint
 
 def test_tokenize(m):
